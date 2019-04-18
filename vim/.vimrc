@@ -21,6 +21,7 @@ set ignorecase
 
 " Syntax highlighting
 syntax enable
+color dracula
 
 set encoding=utf8
 
