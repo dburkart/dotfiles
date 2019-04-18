@@ -1,6 +1,8 @@
-export PATH="~/homebrew/bin:$PATH"
-export PATH="~/homebrew/opt/flex/bin:$PATH"
-export PATH="~/homebrew/opt/bison/bin:$PATH"
+eval HOMEDIR=~
+
+export PATH="$HOMEDIR/homebrew/bin:$PATH"
+export PATH="$HOMEDIR/homebrew/opt/flex/bin:$PATH"
+export PATH="$HOMEDIR/homebrew/opt/bison/bin:$PATH"
 
 export GPG_TTY=$(tty)
 
