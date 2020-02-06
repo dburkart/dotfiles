@@ -1,4 +1,4 @@
 #!/bin/bash -ex
 
-stow -S zsh
-stow -S vim
+~/homebrew/bin/stow -S zsh
+~/homebrew/bin/stow -S vim
