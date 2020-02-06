@@ -44,3 +44,6 @@ set ai "Auto indent
 set si "Smart indent
 set wrap "Wrap lines
 
+" Mappings
+"
+imap jj <Esc>
