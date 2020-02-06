@@ -1,1 +1,11 @@
 .DS_Store
+
+# ZSH untracked files
+zsh/.antigen/.resources
+zsh/.antigen/.zcompdump
+zsh/.antigen/.zcompdump.zwc
+zsh/.antigen/bundles/
+zsh/.antigen/debug.log
+zsh/.antigen/init.zsh
+zsh/.antigen/init.zsh.zwc
+
