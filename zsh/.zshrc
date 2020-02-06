@@ -11,3 +11,20 @@ function get_pwd() {
 }
 
 PROMPT="%~ ➤ "
+
+source ~/.antigen/antigen.zsh
+
+
+# Antigen
+antigen bundle git
+antigen bundle pip
+antigen bundle python
+antigen bundle virtualenv
+antigen bundle ssh-agent
+antigen bundle coffee
+antigen bundle node
+antigen bundle npm
+
+antigen bundle zsh-users/zsh-syntax-highlighting
+
+antigen apply
