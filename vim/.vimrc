@@ -25,8 +25,6 @@ color smyck
 
 set encoding=utf8
 
-set ffs=mac,unix,dos
-
 " Backup and such
 "
 set nobackup
