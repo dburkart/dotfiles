@@ -1,5 +1,16 @@
 #!/bin/bash -e
 
+# If there's no action folder, assume that we're being run from curl
+if [[ ! -d actions ]]; then
+    pushd ~
+    git clone https://github.com/dburkart/dotfiles.git .dotfiles
+    cd .dotfiles
+    ./setup
+    code=$?
+    popd
+    exit $code
+fi
+
 source ./lib/environment.sh
 
 if [[ "$PLATFORM" == "unknown" ]]; then
@@ -7,18 +18,14 @@ if [[ "$PLATFORM" == "unknown" ]]; then
     exit 255
 fi
 
-# If there's no action folder, assume that we're being run from curl
-if [[ ! -d actions ]]; then
-    pushd ~
-    git clone https://github.com/dburkart/dotfiles.git .dotfiles
-    cd .dotfiles
-    ./setup
-    popd
-    exit 0
-fi
-
 for action in $(ls actions); do
     echo ""
     echo "### Running action $action..."
     ./actions/$action
+    code=$?
+
+    if [[ "$code" != "0" ]]; then
+        echo "### Action $action failed, stopping."
+        exit $code
+    fi
 done
