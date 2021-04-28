@@ -1,3 +1,3 @@
 #!/bin/bash -ex
 
-~/homebrew/bin/brew install stow
+$INSTALL_CMD install stow

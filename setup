@@ -1,5 +1,12 @@
 #!/bin/bash -e
 
+source ./lib/environment.sh
+
+if [[ "$PLATFORM" == "unknown" ]]; then
+    echo "Unsupported platform, exiting."
+    exit 255
+fi
+
 for action in $(ls actions); do
     echo ""
     echo "### Running action $action..."
