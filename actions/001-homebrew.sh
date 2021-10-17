@@ -1,7 +1,7 @@
 #!/usr/bin/env bash 
 
-if [[ "$PLATFORM" == "linux" ]]; then
-    echo "Skipping homebrew, since we're on linux."
+if [[ "$PLATFORM" != "macos" ]]; then
+    echo "Skipping, since PLATFORM is not macOS."
     exit 0
 fi
 
