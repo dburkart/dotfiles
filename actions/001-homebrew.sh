@@ -1,4 +1,4 @@
-#!/bin/bash -ex
+#!/usr/bin/env bash 
 
 if [[ "$PLATFORM" == "linux" ]]; then
     echo "Skipping homebrew, since we're on linux."

@@ -12,6 +12,10 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
 	export FLAVOR="redhat"
 	export INSTALL_CMD="sudo dnf -y"
     fi
+elif [[ "$OSTYPE" == "freebsd"* ]]; then
+    export PLATFORM=freebsd
+    export FLAVOR=freebsd
+    export INSTALL_CMD="sudo pkg"
 elif [[ "$OSTYPE" == "darwin"* ]]; then
     export PLATFORM=macos
     export FLAVOR=macos

@@ -1,0 +1,11 @@
+alias pbcopy=xclip -selection clipboard
+
+pws () {
+    if [[ -z $OP_SESSION_my ]]; then
+        eval $(op signin my)
+    fi
+}
+
+pw () {
+    op get item $1 | jq -r '.details.fields[] | select(.designation == "password") | .value'
+}
