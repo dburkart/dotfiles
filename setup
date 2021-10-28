@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/usr/bin/env bash
 
 # If there's no action folder, assume that we're being run from curl
 if [[ ! -d actions ]]; then

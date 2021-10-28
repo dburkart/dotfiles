@@ -1,7 +1,7 @@
-#!/bin/bash -ex
+#!/usr/bin/env bash
 
-if [[ "$PLATFORM" == "linux" ]]; then
-    echo "Skipping miscellaneous macOS steps, since we're on Linux."
+if [[ "$PLATFORM" != "macos" ]]; then
+    echo "Skipping, since PLATFORM is not macOS."
     exit 0
 fi
 

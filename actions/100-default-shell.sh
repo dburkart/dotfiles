@@ -1,4 +1,4 @@
-#!/bin/bash -ex
+#!/usr/bin/env bash
 
 # If we're on fedora, we don't have chsh by default
 if [[ $FLAVOR == 'redhat' ]]; then

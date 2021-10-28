@@ -1,0 +1,16 @@
+URxvt.font                 : -*-terminus-medium-r-normal-*-16-*-*-*-*-*-iso8859-1
+URxvt.boldFont             : -*-terminus-medium-r-normal-*-12-*-*-*-*-*-iso8859-1
+URxvt.italicFont           : -*-terminus-medium-r-normal-*-12-*-*-*-*-*-iso8859-1
+URxvt.boldItalicfont       : -*-terminus-medium-r-normal-*-12-*-*-*-*-*-iso8859-1
+URxvt.cursorBlink          : 1
+URxvt.scrollBar            : false
+URxvt.termName             : rxvt-unicode-256color
+URxvt.internalBorder       : 2
+URxvt.externalBorder       : 0
+URxvt.urgentOnBell         : true
+URxvt.intensityStyles      : true
+URxvt*scrollTtyOutput      : false
+URxvt*scrollWithBuffer     : true
+URxvt*scrollTtyKeypress    : true
+URxvt*saveLines            : 10000
+

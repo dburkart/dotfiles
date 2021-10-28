@@ -21,7 +21,7 @@ set ignorecase
 
 " Syntax highlighting
 syntax enable
-color smyck
+" color smyck
 
 set encoding=utf8
 
