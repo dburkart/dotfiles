@@ -26,7 +26,10 @@ function get_pwd() {
     echo "${PWD/$HOME/~}"
 }
 
-source ~/.glue
+if [[ -f ~/.glue ]]; then
+    source ~/.glue
+fi
+
 source ~/.antigen/antigen.zsh
 
 
