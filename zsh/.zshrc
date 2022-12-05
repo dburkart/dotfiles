@@ -50,3 +50,8 @@ antigen bundle chrissicool/zsh-256color
 antigen bundle subnixr/minimal
 
 antigen apply
+
+export EDITOR=$(which vim)
+
+eval "$(rbenv init - zsh)"
+
