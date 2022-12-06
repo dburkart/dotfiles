@@ -8,7 +8,7 @@ fi
 if [ $SHELL != '/bin/zsh' ]; then
     if ! command -v zsh &> /dev/null
     then
-	$INSTALL_CMD install zsh
+	$INSTALL_CMD zsh
     fi
 
     /usr/bin/chsh -s /bin/zsh
