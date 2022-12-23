@@ -1,5 +1,6 @@
 eval HOMEDIR=~
 
+export PATH="/usr/local/go/bin:$PATH"
 export PATH="$HOMEDIR/homebrew/bin:$PATH"
 export PATH="$HOMEDIR/homebrew/opt/flex/bin:$PATH"
 export PATH="$HOMEDIR/homebrew/opt/bison/bin:$PATH"
