@@ -45,3 +45,9 @@ set wrap "Wrap lines
 " Mappings
 "
 imap jj <Esc>
+
+call plug#begin()
+
+Plug 'junegunn/goyo.vim'
+
+call plug#end()
