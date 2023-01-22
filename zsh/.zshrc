@@ -41,7 +41,6 @@ antigen bundle virtualenv
 antigen bundle ssh-agent
 antigen bundle coffee
 antigen bundle node
-antigen bundle npm
 
 antigen bundle zsh-users/zsh-syntax-highlighting
 antigen bundle chrissicool/zsh-256color
