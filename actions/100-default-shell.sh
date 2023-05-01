@@ -2,7 +2,7 @@
 
 # If we're on fedora, we don't have chsh by default
 if [[ $FLAVOR == 'redhat' ]]; then
-    $INSTALL_CMD install util-linux-user
+    $INSTALL_CMD util-linux-user
 fi
 
 if [ $SHELL != '/bin/zsh' ]; then
