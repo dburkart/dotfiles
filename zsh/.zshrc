@@ -53,5 +53,5 @@ antigen apply
 
 export EDITOR=$(which vim)
 
-eval "$(rbenv init - zsh)"
+# eval "$(rbenv init - zsh)"
 

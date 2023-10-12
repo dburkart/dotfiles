@@ -23,7 +23,7 @@ elif [[ "$OSTYPE" == "freebsd"* ]]; then
 elif [[ "$OSTYPE" == "darwin"* ]]; then
     export PLATFORM=macos
     export FLAVOR=macos
-    export INSTALL_CMD="~/homebrew/bin/brew install"
+    export INSTALL_CMD="${HOME}/homebrew/bin/brew install"
 else
     export PLATFORM=unknown
 fi
