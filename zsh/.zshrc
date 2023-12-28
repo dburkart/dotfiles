@@ -1,6 +1,7 @@
 eval HOMEDIR=~
 
 export PATH="/usr/local/go/bin:$PATH"
+export PATH="$HOMEDIR/go/bin:$PATH"
 export PATH="$HOMEDIR/homebrew/bin:$PATH"
 export PATH="$HOMEDIR/homebrew/opt/flex/bin:$PATH"
 export PATH="$HOMEDIR/homebrew/opt/bison/bin:$PATH"
@@ -14,7 +15,6 @@ export HISTSIZE=1000000000
 export SAVEHIST=1000000000
 export HISTFILE=~/.zsh_history
 # Append items to history immediately
-setopt INC_APPEND_HISTORY
 setopt SHARE_HISTORY
 # Timestamps please
 export HISTTIMEFORMAT="[%F %T] "
@@ -55,3 +55,4 @@ export EDITOR=$(which vim)
 
 # eval "$(rbenv init - zsh)"
 
+alias k="kubectl"
