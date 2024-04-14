@@ -6,6 +6,8 @@ export PATH="$HOMEDIR/homebrew/bin:$PATH"
 export PATH="$HOMEDIR/homebrew/opt/flex/bin:$PATH"
 export PATH="$HOMEDIR/homebrew/opt/bison/bin:$PATH"
 export PATH="$HOMEDIR/bin:$PATH"
+export PATH="$HOMEDIR/go/bin:$PATH"
+export PATH="$HOMEDIR/.local/bin:$PATH"
 
 export GPG_TTY=$(tty)
 
