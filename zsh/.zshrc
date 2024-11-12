@@ -10,6 +10,7 @@ export PATH="$HOMEDIR/homebrew/lib/ruby/gems/3.3.0/bin:$PATH"
 export PATH="$HOMEDIR/go/bin:$PATH"
 export PATH="$HOMEDIR/.local/bin:$PATH"
 export PATH="$HOMEDIR/.config/emacs/bin:$PATH"
+export PATH="$HOMEDIR/Workspace/Tools:$PATH"
 export PATH="$HOMEDIR/bin:$PATH"
 
 export GPG_TTY=$(tty)
