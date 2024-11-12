@@ -5,9 +5,12 @@ export PATH="$HOMEDIR/go/bin:$PATH"
 export PATH="$HOMEDIR/homebrew/bin:$PATH"
 export PATH="$HOMEDIR/homebrew/opt/flex/bin:$PATH"
 export PATH="$HOMEDIR/homebrew/opt/bison/bin:$PATH"
-export PATH="$HOMEDIR/bin:$PATH"
+export PATH="$HOMEDIR/homebrew/opt/ruby/bin:$PATH"
+export PATH="$HOMEDIR/homebrew/lib/ruby/gems/3.3.0/bin:$PATH"
 export PATH="$HOMEDIR/go/bin:$PATH"
 export PATH="$HOMEDIR/.local/bin:$PATH"
+export PATH="$HOMEDIR/.config/emacs/bin:$PATH"
+export PATH="$HOMEDIR/bin:$PATH"
 
 export GPG_TTY=$(tty)
 
@@ -58,3 +61,13 @@ export EDITOR=$(which vim)
 # eval "$(rbenv init - zsh)"
 
 alias k="kubectl"
+alias kns="kubectl ns"
+alias kctx="kubectl ctx"
+
+alias gz="cd ~/Projects/zenful"
+alias ga="cd ~/Projects/aws-infra"
+
+alias vi="nvim"
+alias vim="nvim"
+
+source <(fzf --zsh)
