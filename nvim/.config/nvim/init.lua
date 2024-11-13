@@ -92,6 +92,10 @@ vim.keymap.set("n", "<leader>wk", "<C-w><C-k>", { desc = "Move focus to the uppe
 vim.keymap.set("n", "<leader>wj", "<C-w><C-j>", { desc = "Move focus to the lower window" })
 vim.keymap.set("n", "<leader>wc", ":close<Enter>", { desc = "Close the current window" })
 
+-- Buffer related keybindings
+vim.keymap.set("n", "<leader>bn", ":bnext<Enter>", { desc = "Move to the next buffer" })
+vim.keymap.set("n", "<leader>bp", ":bprevious<Enter>", { desc = "Move to the next buffer" })
+
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
 
@@ -172,6 +176,19 @@ require("lazy").setup({
 	-- Then, because we use the `config` key, the configuration only runs
 	-- after the plugin has been loaded:
 	--  config = function() ... end
+
+	{
+		{
+			"akinsho/toggleterm.nvim",
+			version = "*",
+			config = function()
+				local toggleterm = require("toggleterm")
+				toggleterm.setup({})
+
+				vim.keymap.set("n", "<leader>ot", toggleterm.toggle, { desc = "Toggle Terminal" })
+			end,
+		},
+	},
 
 	{ -- Useful plugin to show you pending keybinds.
 		"folke/which-key.nvim",
@@ -257,6 +274,9 @@ require("lazy").setup({
 
 			-- Useful for getting pretty icons, but requires a Nerd Font.
 			{ "nvim-tree/nvim-web-devicons", enabled = vim.g.have_nerd_font },
+
+			-- File browser
+			"nvim-telescope/telescope-file-browser.nvim",
 		},
 		config = function()
 			-- Telescope is a fuzzy finder that comes with a lot of different things that
@@ -290,6 +310,13 @@ require("lazy").setup({
 				--   },
 				-- },
 				-- pickers = {}
+				defaults = {
+					file_ignore_patterns = {
+						"node_modules",
+						"vendor",
+						".git",
+					},
+				},
 				extensions = {
 					["ui-select"] = {
 						require("telescope.themes").get_dropdown(),
@@ -300,6 +327,7 @@ require("lazy").setup({
 			-- Enable Telescope extensions if they are installed
 			pcall(require("telescope").load_extension, "fzf")
 			pcall(require("telescope").load_extension, "ui-select")
+			pcall(require("telescope").load_extension, "file_browser")
 
 			-- See `:help telescope.builtin`
 			local builtin = require("telescope.builtin")
@@ -313,6 +341,11 @@ require("lazy").setup({
 			vim.keymap.set("n", "<leader>sr", builtin.resume, { desc = "[S]earch [R]esume" })
 			vim.keymap.set("n", "<leader>s.", builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
 			vim.keymap.set("n", "<leader><leader>", builtin.buffers, { desc = "[ ] Find existing buffers" })
+
+			-- File browser
+			vim.keymap.set("n", "<leader>fb", function()
+				require("telescope").extensions.file_browser.file_browser()
+			end, { desc = "[ ] Find existing buffers" })
 
 			-- Slightly advanced example of overriding default behavior and theme
 			vim.keymap.set("n", "<leader>/", function()
@@ -524,6 +557,7 @@ require("lazy").setup({
 				clangd = {},
 				gopls = {},
 				pyright = {},
+				vuels = {},
 				-- rust_analyzer = {},
 				-- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
 				--
@@ -823,6 +857,7 @@ require("lazy").setup({
 				"query",
 				"vim",
 				"vimdoc",
+				"vue",
 			},
 			-- Autoinstall languages that are not installed
 			auto_install = true,
