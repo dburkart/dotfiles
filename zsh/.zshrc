@@ -66,7 +66,6 @@ alias kns="kubectl ns"
 alias kctx="kubectl ctx"
 
 alias gz="cd ~/Projects/zenful"
-alias ga="cd ~/Projects/aws-infra"
 
 alias vi="nvim"
 alias vim="nvim"
