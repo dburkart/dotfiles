@@ -67,6 +67,10 @@ alias kctx="kubectl ctx"
 
 alias gz="cd ~/Projects/zenful"
 
+alias ta="tmux attach"
+
+alias music="cd ~/Music && termusic"
+
 alias vi="nvim"
 alias vim="nvim"
 

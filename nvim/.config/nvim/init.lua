@@ -59,6 +59,8 @@ vim.opt.inccommand = "split"
 -- Minimal number of screen lines to keep above and below the cursor.
 vim.opt.scrolloff = 10
 
+vim.opt.tabstop = 4
+
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
 
@@ -401,6 +403,9 @@ require("lazy").setup({
 
 			-- Allows extra capabilities provided by nvim-cmp
 			"hrsh7th/cmp-nvim-lsp",
+
+			-- Rust Tools
+			{ "simrat39/rust-tools.nvim", opts = {} },
 		},
 		config = function()
 			-- Brief aside: **What is LSP?**
@@ -558,7 +563,7 @@ require("lazy").setup({
 				gopls = {},
 				pyright = {},
 				vuels = {},
-				-- rust_analyzer = {},
+				rust_analyzer = {},
 				-- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
 				--
 				-- Some languages (like typescript) have entire language plugins that can be useful:
