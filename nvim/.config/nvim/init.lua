@@ -98,6 +98,10 @@ vim.keymap.set("n", "<leader>wc", ":close<Enter>", { desc = "Close the current w
 vim.keymap.set("n", "<leader>bn", ":bnext<Enter>", { desc = "Move to the next buffer" })
 vim.keymap.set("n", "<leader>bp", ":bprevious<Enter>", { desc = "Move to the next buffer" })
 
+-- Insert mode movements
+vim.keymap.set("i", "<C-a>", "<C-\\><C-O>_", { desc = "Move to the beginning of the line" })
+vim.keymap.set("i", "<C-e>", "<End>", { desc = "Move to the end of the line" })
+
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
 
