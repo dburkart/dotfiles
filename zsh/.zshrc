@@ -74,4 +74,7 @@ alias music="cd ~/Music && termusic"
 alias vi="nvim"
 alias vim="nvim"
 
+alias vpn="sudo tailscale set --exit-node=epsilon.tail9990fb.ts.net."
+alias vpn-off="sudo tailscale set --exit-node="
+
 source <(fzf --zsh)
