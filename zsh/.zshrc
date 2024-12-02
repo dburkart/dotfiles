@@ -57,7 +57,7 @@ antigen bundle subnixr/minimal
 
 antigen apply
 
-export EDITOR=$(which vim)
+export EDITOR=$(which nvim)
 
 # eval "$(rbenv init - zsh)"
 
