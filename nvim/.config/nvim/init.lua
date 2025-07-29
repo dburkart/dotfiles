@@ -1,4 +1,4 @@
--- The following is ripped from kickstart.nvim (https://github.com/nvim-lua/kickstart.nvim)
+-- The following is based on kickstart.nvim (https://github.com/nvim-lua/kickstart.nvim)
 
 -- Set <space> as the leader key
 -- See `:help mapleader`
@@ -79,12 +79,6 @@ vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Open diagn
 -- or just use <C-\><C-n> to exit terminal mode
 vim.keymap.set("t", "<Esc><Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode" })
 
--- TIP: Disable arrow keys in normal mode
--- vim.keymap.set('n', '<left>', '<cmd>echo "Use h to move!!"<CR>')
--- vim.keymap.set('n', '<right>', '<cmd>echo "Use l to move!!"<CR>')
--- vim.keymap.set('n', '<up>', '<cmd>echo "Use k to move!!"<CR>')
--- vim.keymap.set('n', '<down>', '<cmd>echo "Use j to move!!"<CR>')
-
 -- Keybinds to make split navigation easier.
 vim.keymap.set("n", "<leader>wv", "<C-w><C-v>", { desc = "Create vertical split window" })
 vim.keymap.set("n", "<leader>ww", "<C-w><C-w>", { desc = "Move focus to other next window" })
@@ -101,6 +95,15 @@ vim.keymap.set("n", "<leader>bp", ":bprevious<Enter>", { desc = "Move to the nex
 -- Insert mode movements
 vim.keymap.set("i", "<C-a>", "<C-\\><C-O>_", { desc = "Move to the beginning of the line" })
 vim.keymap.set("i", "<C-e>", "<End>", { desc = "Move to the end of the line" })
+
+-- Registers
+vim.keymap.set("n", "<leader>pk", '"kp', { noremap = true, silent = true, desc = "Paste into k" })
+vim.keymap.set("n", "<leader>pj", '"jp', { noremap = true, silent = true, desc = "Paste into k" })
+vim.keymap.set("v", "<leader>yk", '"ky', { noremap = true, silent = true, desc = "Yank into k" })
+vim.keymap.set("v", "<leader>yj", '"jy', { noremap = true, silent = true, desc = "Yank into k" })
+
+-- Marks
+vim.keymap.set("n", "<leader>mm", "`", { noremap = true, silent = true })
 
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
@@ -168,6 +171,66 @@ require("lazy").setup({
 		},
 	},
 
+	-- Harpoon
+	{
+		"ThePrimeagen/harpoon",
+		branch = "harpoon2",
+		dependencies = { "nvim-lua/plenary.nvim" },
+		config = function()
+			local harpoon = require("harpoon")
+
+			harpoon:setup()
+
+			-- basic telescope configuration
+			local conf = require("telescope.config").values
+			local function toggle_telescope(harpoon_files)
+				local file_paths = {}
+				for _, item in ipairs(harpoon_files.items) do
+					table.insert(file_paths, item.value)
+				end
+
+				require("telescope.pickers")
+					.new({}, {
+						prompt_title = "Harpoon",
+						finder = require("telescope.finders").new_table({
+							results = file_paths,
+						}),
+						previewer = conf.file_previewer({}),
+						sorter = conf.generic_sorter({}),
+					})
+					:find()
+			end
+
+			vim.keymap.set("n", "<leader>a", function()
+				harpoon:list():add()
+			end)
+			vim.keymap.set("n", "<C-e>", function()
+				harpoon.ui:toggle_quick_menu(harpoon:list())
+			end)
+
+			vim.keymap.set("n", "<C-h>", function()
+				harpoon:list():select(1)
+			end)
+			vim.keymap.set("n", "<C-t>", function()
+				harpoon:list():select(2)
+			end)
+			vim.keymap.set("n", "<C-n>", function()
+				harpoon:list():select(3)
+			end)
+			vim.keymap.set("n", "<C-s>", function()
+				harpoon:list():select(4)
+			end)
+
+			-- Toggle previous & next buffers stored within Harpoon list
+			vim.keymap.set("n", "<C-S-P>", function()
+				harpoon:list():prev()
+			end)
+			vim.keymap.set("n", "<C-S-N>", function()
+				harpoon:list():next()
+			end)
+		end,
+	},
+
 	-- NOTE: Plugins can also be configured to run Lua code when they are loaded.
 	--
 	-- This is often very useful to both group configuration, as well as handle
@@ -184,7 +247,7 @@ require("lazy").setup({
 	--  config = function() ... end
 
 	{
-		{
+		{ -- Toggle the terminal with <space> o t
 			"akinsho/toggleterm.nvim",
 			version = "*",
 			config = function()

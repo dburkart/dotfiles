@@ -78,3 +78,10 @@ alias vpn="sudo tailscale set --exit-node=epsilon.tail9990fb.ts.net."
 alias vpn-off="sudo tailscale set --exit-node="
 
 source <(fzf --zsh)
+
+# bun completions
+[ -s "/Users/dburkart/.bun/_bun" ] && source "/Users/dburkart/.bun/_bun"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
