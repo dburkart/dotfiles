@@ -80,7 +80,7 @@ alias vpn-off="sudo tailscale set --exit-node="
 source <(fzf --zsh)
 
 # bun completions
-[ -s "/Users/dburkart/.bun/_bun" ] && source "/Users/dburkart/.bun/_bun"
+[ -s "~/.bun/_bun" ] && source "~/.bun/_bun"
 
 # bun
 export BUN_INSTALL="$HOME/.bun"
