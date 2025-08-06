@@ -5,3 +5,4 @@ export PATH=~/homebrew/bin:$PATH
 stow -S zsh
 stow -S nvim
 stow -S tmux
+stow -S bin

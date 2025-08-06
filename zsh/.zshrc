@@ -57,6 +57,8 @@ antigen bundle subnixr/minimal
 
 antigen apply
 
+alias vi="nvim"
+alias vim="nvim"
 export EDITOR=$(which nvim)
 
 # eval "$(rbenv init - zsh)"
@@ -66,13 +68,7 @@ alias kns="kubectl ns"
 alias kctx="kubectl ctx"
 
 alias gz="cd ~/Projects/zenful"
-
-alias ta="tmux attach"
-
 alias music="cd ~/Music && termusic"
-
-alias vi="nvim"
-alias vim="nvim"
 
 alias vpn="sudo tailscale set --exit-node=epsilon.tail9990fb.ts.net."
 alias vpn-off="sudo tailscale set --exit-node="
@@ -85,3 +81,6 @@ source <(fzf --zsh)
 # bun
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
+
+# Keybinds
+bindkey -s ^f "tmux-sessionizer\n"
