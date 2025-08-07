@@ -54,6 +54,7 @@ antigen bundle chrissicool/zsh-256color
 
 # Theme
 antigen bundle subnixr/minimal
+source ~/.config/zsh-themes/catppuccin-mocha.zsh
 
 antigen apply
 
