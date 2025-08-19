@@ -86,6 +86,9 @@ vim.keymap.set("v", "<leader>yk", '"jy', { noremap = true, silent = true, desc =
 -- Marks
 vim.keymap.set("n", "<leader>mm", "`", { noremap = true, silent = true })
 
+-- Todo
+vim.keymap.set("n", "<leader>td", "<cmd>e ~/todo.md<CR>", { desc = "Open global todo note" })
+
 vim.api.nvim_create_autocmd("TextYankPost", {
 	desc = "Highlight when yanking (copying) text",
 	group = vim.api.nvim_create_augroup("kickstart-highlight-yank", { clear = true }),
@@ -614,6 +617,14 @@ require("lazy").setup({
 
 		config = function()
 			require("nvim-dap-virtual-text").setup()
+		end,
+	},
+
+	{ -- Todo Tracking
+		"bngarren/checkmate.nvim",
+		ft = "markdown",
+		config = function()
+			require("checkmate").setup()
 		end,
 	},
 })
