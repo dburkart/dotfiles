@@ -1,4 +1,5 @@
 {
+  "99": { "branch": "master", "commit": "ec9872f7df7f4eb8b319719c1c253eb3ea8877ed" },
   "LuaSnip": { "branch": "master", "commit": "659c4479529a05cc9b05ef762639a09d366cc690" },
   "catppuccin-frappe": { "branch": "main", "commit": "637d99e638bc6f1efedac582f6ccab08badac0c6" },
   "checkmate.nvim": { "branch": "main", "commit": "b544f3fd447bdf7e752e2ab8caaa68c4370bc2a2" },

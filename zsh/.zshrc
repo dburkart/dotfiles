@@ -85,3 +85,6 @@ export PATH="$BUN_INSTALL/bin:$PATH"
 
 # Keybinds
 bindkey -s ^f "tmux-sessionizer\n"
+
+# Environment keys
+source ~/.envkeys
