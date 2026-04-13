@@ -427,7 +427,7 @@ require("lazy").setup({
 	},
 
 	{
-		"enchasnovski/mini.nvim",
+		"nvim-mini/mini.nvim",
 		config = function()
 			-- Better Arround / Inside textobjects
 			--

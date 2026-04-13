@@ -88,3 +88,4 @@ bindkey -s ^f "tmux-sessionizer\n"
 
 # Environment keys
 source ~/.envkeys
+
