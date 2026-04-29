@@ -54,7 +54,7 @@ antigen bundle chrissicool/zsh-256color
 
 # Theme
 antigen bundle subnixr/minimal
-source ~/.config/zsh-themes/catppuccin-mocha.zsh
+# source ~/.config/zsh-themes/catppuccin-mocha.zsh
 
 antigen apply
 
@@ -82,10 +82,10 @@ source <(fzf --zsh)
 # bun
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
+export PATH="/home/dburkart/.cargo/bin:$PATH"
 
 # Keybinds
 bindkey -s ^f "tmux-sessionizer\n"
 
 # Environment keys
 source ~/.envkeys
-

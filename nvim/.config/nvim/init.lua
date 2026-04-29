@@ -366,7 +366,7 @@ require("lazy").setup({
 					function(server_name)
 						local server = servers[server_name] or {}
 						server.capabilities = vim.tbl_deep_extend("force", {}, capabilities, server.capabilities or {})
-						require("lspconfig")[server_name].setup(server)
+						vim.lsp.config(server_name).setup(server)
 					end,
 				},
 			})
@@ -459,7 +459,7 @@ require("lazy").setup({
 	{ -- Treesitter
 		"nvim-treesitter/nvim-treesitter",
 		build = ":TSUpdate",
-		main = "nvim-treesitter.configs",
+		branch = "master",
 		opts = {
 			ensure_installed = {
 				"bash",
