@@ -12,6 +12,7 @@ export PATH="$HOMEDIR/.local/bin:$PATH"
 export PATH="$HOMEDIR/.config/emacs/bin:$PATH"
 export PATH="$HOMEDIR/Workspace/Tools:$PATH"
 export PATH="$HOMEDIR/bin:$PATH"
+export PATH="$HOMEDIR/.config/emacs/bin:$PATH"
 
 export GPG_TTY=$(tty)
 
