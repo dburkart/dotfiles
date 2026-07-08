@@ -74,6 +74,7 @@ alias music="cd ~/Music && termusic"
 
 alias vpn="sudo tailscale set --exit-node=epsilon.tail9990fb.ts.net."
 alias vpn-off="sudo tailscale set --exit-node="
+alias pi="pi-sandbox"
 
 source <(fzf --zsh)
 
