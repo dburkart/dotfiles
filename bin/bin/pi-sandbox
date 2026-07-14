@@ -54,6 +54,8 @@ if [[ ! -f "$PROFILE" ]]; then
 (allow file-write* (subpath "/private/tmp"))
 (allow file-write* (subpath "/var/tmp"))
 (allow file-write* (subpath "/private/var/tmp"))
+(allow file-write* (subpath (param "HOME_DIR") "/.pi/agent/settings.json.lock"))
+(allow file-write* (subpath (param "HOME_DIR") "/.pi/agent/sessions"))
 (allow file-write* (subpath (param "TMP_DIR")))
 ;; Editor state: nvim writes swap, ShaDa, undo, and plugin logs under
 ;; ~/.local (state + share) and ~/.cache; other editors cache similarly.
