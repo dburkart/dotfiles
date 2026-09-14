@@ -1,14 +1,65 @@
 #!/usr/bin/env bash
 
+# Recency tracking: one "<epoch>\t<path>" line per project; last write wins.
+# atime is deliberately avoided -- relatime barely updates it, and `find`
+# itself touches every directory it lists, so it carries no useful signal.
+state_dir="${XDG_CACHE_HOME:-$HOME/.cache}/tmux-sessionizer"
+state_file="$state_dir/access"
+
 if [[ $# -eq 1 ]]; then
     selected=$1
 else
-    selected=$(find ~/Projects ~/Workspace -mindepth 1 -maxdepth 1 -type d | fzf)
+    # Last-access time per project (never-visited projects default to 0).
+    declare -A last_access=()
+    if [[ -r $state_file ]]; then
+        while IFS=$'\t' read -r ts path; do
+            [[ -n $path ]] && last_access[$path]=$ts
+        done < "$state_file"
+    fi
+
+    # Newest first. fzf's default layout draws the list from the bottom up, so
+    # the first item lands at the bottom next to the prompt and the cursor
+    # starts on it -- i.e. the most recent project is the default choice. fzf
+    # leaves the list unsorted while the query is empty, so this order holds
+    # until you type; after that normal fuzzy ranking takes over. Note we do NOT
+    # set --tiebreak=index: it is redundant for the empty query but makes
+    # recency win score ties while typing, so 'fade' would match
+    # 'fade-browser' ahead of an exact 'fade'.
+    #
+    # Inside tmux that most-recent entry is usually the session we're already
+    # in, so default to the second-most-recent instead. --sync is required for
+    # start:pos(N) to see the list. change:first re-selects the best match as
+    # soon as you type -- without it fzf keeps the cursor on the same row index
+    # (so the initial pick would stay highlighted even when it no longer fits).
+    # Mirror the tmux tab colours (fg=black bg=green in .tmux.conf), inverted:
+    # the selected row is green on black. 'gutter' must be set explicitly -- it
+    # otherwise inherits bg+, which would put a green marker on every unselected
+    # row. 236 is fzf's own default gutter colour.
+    fzf_opts=(--color='fg+:green,bg+:black,hl+:green:bold,pointer:green,gutter:236')
+    if [[ -n $TMUX ]]; then
+        fzf_opts+=(--sync --bind 'start:pos(2),change:first')
+    fi
+
+    selected=$(
+        while IFS= read -r -d '' dir; do
+            printf '%s\t%s\n' "${last_access[$dir]:-0}" "$dir"
+        done < <(find ~/Projects ~/Workspace -mindepth 1 -maxdepth 1 -type d -print0) |
+            sort -t $'\t' -k1,1nr -k2,2 |
+            cut -f2- |
+            fzf "${fzf_opts[@]}"
+    )
 fi
 
 if [[ -z $selected ]]; then
     exit 0
 fi
+
+# Record this access (rewrite, so the file stays one line per project).
+mkdir -p "$state_dir"
+tmp=$(mktemp "$state_dir/access.XXXXXX")
+[[ -r $state_file ]] && awk -F'\t' -v d="$selected" '$2 != d' "$state_file" > "$tmp"
+printf '%s\t%s\n' "$(date +%s)" "$selected" >> "$tmp"
+mv "$tmp" "$state_file"
 
 selected_name=$(basename "$selected" | tr . _)
 tmux_running=$(pgrep tmux)
