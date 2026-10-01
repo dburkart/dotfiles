@@ -43,7 +43,11 @@ else
     selected=$(
         while IFS= read -r -d '' dir; do
             printf '%s\t%s\n' "${last_access[$dir]:-0}" "$dir"
-        done < <(find ~/Projects ~/Workspace -mindepth 1 -maxdepth 1 -type d -print0) |
+        done < <(
+            find ~/Projects ~/Workspace -mindepth 1 -maxdepth 1 -type d -print0
+            # ~/.pi and ~/.dotfiles are themselves projects, not containers.
+            printf '%s\0' "$HOME/.pi" "$HOME/.dotfiles"
+        ) |
             sort -t $'\t' -k1,1nr -k2,2 |
             cut -f2- |
             fzf "${fzf_opts[@]}"
