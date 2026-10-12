@@ -1,0 +1,160 @@
+#!/usr/bin/env bash
+
+# Recency tracking for the project picker: one "<epoch>\t<path>" line per
+# project; last write wins. atime is deliberately avoided -- relatime barely
+# updates it, and `find` itself touches every directory it lists, so it carries
+# no useful signal. The window picker needs none of this: tmux already tracks
+# window_activity.
+state_dir="${XDG_CACHE_HOME:-$HOME/.cache}/tmux-surfer"
+state_file="$state_dir/access"
+
+# Shared by both pickers. Newest first, because fzf's default layout draws the
+# list from the bottom up: the first item lands at the bottom next to the prompt
+# and the cursor starts on it, i.e. the most recent entry is the default choice.
+# fzf leaves the list unsorted while the query is empty, so this order holds
+# until you type; after that normal fuzzy ranking takes over. Note we do NOT set
+# --tiebreak=index: it is redundant for the empty query but makes recency win
+# score ties while typing, so 'fade' would match 'fade-browser' ahead of an
+# exact 'fade'.
+#
+# Inside tmux that most-recent entry is usually where we already are -- the
+# session we're in, or the window we're in -- so default to the second-most-
+# recent instead. --sync is required for start:pos(2) to see the list.
+# change:first re-selects the best match as soon as you type -- without it fzf
+# keeps the cursor on the same row index (so the initial pick would stay
+# highlighted even when it no longer fits).
+#
+# Mirror the tmux tab colours (fg=black bg=green in .tmux.conf), inverted: the
+# selected row is green on black. 'gutter' must be set explicitly -- it
+# otherwise inherits bg+, which would put a green marker on every unselected
+# row. 236 is fzf's own default gutter colour.
+fzf_opts=(--color='fg+:green,bg+:black,hl+:green:bold,pointer:green,gutter:236')
+if [[ -n $TMUX ]]; then
+    fzf_opts+=(--sync --bind 'start:pos(2),change:first')
+fi
+
+windows_mode=false
+case ${1-} in
+    -w | --windows) windows_mode=true ;;
+esac
+
+if $windows_mode; then
+    # The first two rows are "where I am" and "where I was", and tmux tracks the
+    # second one in two halves: the client remembers the session it came from
+    # (client_last_session), while a session remembers the window it is showing
+    # and the one before that (window_active, window_last_flag). So if the client
+    # has switched sessions since, the window we were in is the active window of
+    # that previous session; otherwise it is this session's last-window pointer,
+    # the same one last-window (prefix ;) uses.
+    #
+    # Every window of every session then follows, ordered by the above and after
+    # that by window_activity -- the epoch of the last time anything happened in
+    # the window -- so the rest of the list is tmux's own MRU and needs no
+    # bookkeeping of ours. Activity is not enough for the top two: background
+    # windows with steady output (agents, servers) are often more recently
+    # "active" than the window you are sitting in, so they would displace the
+    # window you came from. The target is the third field and stays hidden from
+    # fzf via --with-nth, so fzf matches only what you can read; the rank and
+    # activity are dropped before the picker sees them, since they are there only
+    # to drive the order. It is worth showing the window name, path and title:
+    # most windows are named after the command running in them ('node', 'zsh'),
+    # so the name alone identifies almost nothing.
+    #
+    # Both halves come from a single tmux invocation -- client variables exist
+    # only in a client context and the window list only in a window one, so this
+    # is a command sequence, and the client line arrives first. Each extra tmux
+    # process costs ~25ms of startup here, which is the difference between the
+    # picker appearing instantly and looking laggy. The sequence has to sit on one
+    # line: '\;' is a literal ';' argument to tmux, and a newline after it would
+    # end the shell command instead, leaving list-windows to be run as a shell
+    # command.
+    client_format=$'#{client_session}\t#{client_last_session}'
+    windows_format=$'#{session_name}\t#{window_index}\t#{window_activity}\t#{window_name}\t#{b:pane_current_path}\t#{pane_title}\t#{window_active}\t#{window_last_flag}'
+    selected_window=$(
+        tmux display-message -p "$client_format" \; list-windows -a -F "$windows_format" |
+            awk -F'\t' -v OFS='\t' '
+                NR == 1 { cur = $1; prev = $2 == "" ? $1 : $2; next }
+                {
+                    rank = 1
+                    if ($1 == cur) {
+                        if ($7 == 1) rank = 3
+                        else if ($8 == 1 && prev == cur) rank = 2
+                    } else if ($1 == prev && $7 == 1) rank = 2
+                    print rank, $3, $1 ":" $2, $1 ":" $2 "  " $4 "  " $5 "  " $6
+                }
+            ' |
+            sort -t $'\t' -k1,1nr -k2,2nr |
+            cut -f3,4 |
+            fzf --delimiter=$'\t' --with-nth=2 "${fzf_opts[@]}" |
+            cut -f1
+    )
+
+    if [[ -z $selected_window ]]; then
+        exit 0
+    fi
+
+    # switch-client takes a session:window target -- tmux treats anything with a
+    # ':' as a pane target and moves session, window and pane together -- but it
+    # needs an attached client. With none, select-window still sets the session's
+    # current window.
+    if [[ -n $(tmux list-clients) ]]; then
+        tmux switch-client -t "$selected_window"
+    else
+        tmux select-window -t "$selected_window"
+    fi
+    exit 0
+fi
+
+if [[ $# -eq 1 ]]; then
+    selected=$1
+else
+    selected=$(
+        {
+            find ~/Projects ~/Workspace -mindepth 1 -maxdepth 1 -type d -print
+            # ~/.pi and ~/.dotfiles are themselves projects, not containers.
+            printf '%s\n' "$HOME/.pi" "$HOME/.dotfiles"
+        } | awk -F'\t' -v state_file="$state_file" '
+            # Attach each project its last-access time, defaulting to 0. awk
+            # subscripts are strings, so this avoids bash 4 associative arrays
+            # (macOS ships bash 3.2 at /bin/bash).
+            BEGIN {
+                while (state_file != "" && (getline line < state_file) > 0) {
+                    if (split(line, fields, "\t") == 2 && fields[2] != "") last_access[fields[2]] = fields[1]
+                }
+            }
+            { print ($0 in last_access ? last_access[$0] : 0) "\t" $0 }
+        ' |
+            sort -t $'\t' -k1,1nr -k2,2 |
+            cut -f2- |
+            fzf "${fzf_opts[@]}"
+    )
+fi
+
+if [[ -z $selected ]]; then
+    exit 0
+fi
+
+# Record this access (rewrite, so the file stays one line per project).
+mkdir -p "$state_dir"
+tmp=$(mktemp "$state_dir/access.XXXXXX")
+[[ -r $state_file ]] && awk -F'\t' -v d="$selected" '$2 != d' "$state_file" > "$tmp"
+printf '%s\t%s\n' "$(date +%s)" "$selected" >> "$tmp"
+mv "$tmp" "$state_file"
+
+selected_name=$(basename "$selected" | tr . _)
+tmux_running=$(pgrep tmux)
+
+if [[ -z $TMUX ]] && [[ -z $tmux_running ]]; then
+    tmux new-session -s $selected_name -c $selected
+    exit 0
+fi
+
+if ! tmux has-session -t=$selected_name 2> /dev/null; then
+    tmux new-session -ds $selected_name -c $selected
+fi
+
+if [[ -z $TMUX ]]; then
+    tmux attach -t $selected_name
+else
+    tmux switch-client -t $selected_name
+fi
